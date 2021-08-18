@@ -91,18 +91,18 @@ public class CadastroActivity extends AppCompatActivity {
 //                  Redireciona o usuário com base no seu tipo
 //                  Se o usuario for passageiro chama a activity maps
 //                  senão chama a activity requisições
+
+                        String msgSucessoCadastro = "";
                         if(verificaTipoUsuario() == "P"){
                             startActivity(new Intent(CadastroActivity.this, MapsActivity.class));
-                            finish();
-
-                            Toast.makeText(CadastroActivity.this, "Sucesso ao cadastrar passageiro", Toast.LENGTH_SHORT).show();
+                            msgSucessoCadastro = "Sucesso ao cadastrar passageiro";
 
                         }else{
                             startActivity(new Intent(CadastroActivity.this, RequisicoesActivity.class));
-                            finish();
-                            Toast.makeText(CadastroActivity.this, "Sucesso ao cadastrar motorista", Toast.LENGTH_SHORT).show();
-
+                            msgSucessoCadastro = "Sucesso ao cadastrar motorista";
                         }
+                        finish();
+                        Toast.makeText(CadastroActivity.this, msgSucessoCadastro, Toast.LENGTH_SHORT).show();
                     }catch (Exception e){
                         e.printStackTrace();
                     }

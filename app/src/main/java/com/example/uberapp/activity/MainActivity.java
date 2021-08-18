@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.example.uberapp.R;
+import com.example.uberapp.helper.UsuarioFirebase;
+import com.example.uberapp.model.Usuario;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,4 +30,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        UsuarioFirebase.redirecionaUsuarioLogado(MainActivity.this);
+    }
 }
