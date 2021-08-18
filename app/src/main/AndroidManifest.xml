@@ -15,14 +15,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.CadastroActivity"
+        <activity android:name=".activity.RequisicoesActivity"></activity>
+        <activity
+            android:name=".activity.CadastroActivity"
             android:label="@string/titulo_cadastro"
-            android:parentActivityName=".activity.MainActivity"></activity>
-
-        <activity android:name=".activity.LoginActivity"
+            android:parentActivityName=".activity.MainActivity" />
+        <activity
+            android:name=".activity.LoginActivity"
             android:label="@string/titulo_login"
-            android:parentActivityName=".activity.MainActivity"/>
-
+            android:parentActivityName=".activity.MainActivity" />
         <activity android:name=".activity.MapsActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
