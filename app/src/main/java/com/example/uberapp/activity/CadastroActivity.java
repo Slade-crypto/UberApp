@@ -94,7 +94,7 @@ public class CadastroActivity extends AppCompatActivity {
 
                         String msgSucessoCadastro = "";
                         if(verificaTipoUsuario() == "P"){
-                            startActivity(new Intent(CadastroActivity.this, MapsActivity.class));
+                            startActivity(new Intent(CadastroActivity.this, PassageiroActivity.class));
                             msgSucessoCadastro = "Sucesso ao cadastrar passageiro";
 
                         }else{

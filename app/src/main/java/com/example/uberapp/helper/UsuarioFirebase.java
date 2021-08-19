@@ -6,7 +6,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.example.uberapp.activity.MapsActivity;
+import com.example.uberapp.activity.PassageiroActivity;
 import com.example.uberapp.activity.RequisicoesActivity;
 import com.example.uberapp.config.ConfiguracaoFirebase;
 import com.example.uberapp.model.Usuario;
@@ -70,7 +70,7 @@ public class UsuarioFirebase {
                     if (tipoUsuario.equals("M")) {
                         activity.startActivity(new Intent(activity, RequisicoesActivity.class));
                     } else {
-                        activity.startActivity(new Intent(activity, MapsActivity.class));
+                        activity.startActivity(new Intent(activity, PassageiroActivity.class));
 
                     }
 
