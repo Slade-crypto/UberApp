@@ -72,6 +72,7 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_gravity="bottom"
+        android:onClick="chamarUber"
         android:text="Chamar uber"
         android:theme="@style/botaoPadrao" />
 
