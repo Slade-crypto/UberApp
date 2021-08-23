@@ -2,6 +2,7 @@ package com.example.uberapp.activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
@@ -11,8 +12,11 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.uberapp.R;
+import com.example.uberapp.adapter.RequisicoesAdapter;
 import com.example.uberapp.config.ConfiguracaoFirebase;
+import com.example.uberapp.helper.UsuarioFirebase;
 import com.example.uberapp.model.Requisicao;
+import com.example.uberapp.model.Usuario;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -31,6 +35,8 @@ public class RequisicoesActivity extends AppCompatActivity {
     private FirebaseAuth autenticacao;
     private DatabaseReference firebaseRef;
     private List<Requisicao> listaRequisicao = new ArrayList<>();
+    private RequisicoesAdapter adapter;
+    private Usuario motorista;
 
 
 
@@ -68,8 +74,17 @@ public class RequisicoesActivity extends AppCompatActivity {
         textResultado = findViewById(R.id.textResultado);
 
         //Configurações iniciais
+        motorista = UsuarioFirebase.getDadosUsuarioLogado();
         autenticacao = ConfiguracaoFirebase.getFirebaseAutenticacao();
         firebaseRef = ConfiguracaoFirebase.getFirebaseDatabase();
+
+        //Configuração RecyclerView
+        adapter = new RequisicoesAdapter(listaRequisicao, getApplicationContext(), motorista);
+
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerRequisicoes.setLayoutManager(layoutManager);
+        recyclerRequisicoes.setHasFixedSize(true);
+        recyclerRequisicoes.setAdapter(adapter);
 
         recuperarRequisicoes();
     }
@@ -95,9 +110,11 @@ public class RequisicoesActivity extends AppCompatActivity {
 
                 for(DataSnapshot ds: snapshot.getChildren()){
                     Requisicao requisicao = ds.getValue(Requisicao.class);
-                    
+
                     listaRequisicao.add(requisicao);
                 }
+
+                adapter.notifyDataSetChanged();
 
             }
 
