@@ -40,6 +40,8 @@ public class RequisicoesAdapter extends RecyclerView.Adapter<RequisicoesAdapter.
         Requisicao requisicao = requisicoes.get(position);
         Usuario passageiro = requisicao.getPassageiro();
 
+
+
         holder.nome.setText(passageiro.getNome());
         holder.distancia.setText("1 km- aproximadamente");
 

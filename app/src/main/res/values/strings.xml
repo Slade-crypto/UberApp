@@ -5,4 +5,5 @@
     <string name="titulo_login">Acessar minha conta</string>
     <string name="title_activity_passageiro">PassageiroActivity</string>
     <string name="aguardando_requisi_es">Aguardando Requisições</string>
+    <string name="title_activity_corrida">CorridaActivity</string>
 </resources>

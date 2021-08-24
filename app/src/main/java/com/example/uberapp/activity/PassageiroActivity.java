@@ -253,7 +253,7 @@ public class PassageiroActivity extends AppCompatActivity
 
     }
 
-    public void recuperarLocalizacaoUsuario() {
+    private void recuperarLocalizacaoUsuario() {
 
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 
