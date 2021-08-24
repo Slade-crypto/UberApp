@@ -10,7 +10,7 @@
         android:id="@+id/textResultado"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="aguardando_requisi_es"
+        android:text="aguardando requisições"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/recyclerRequisicoes"

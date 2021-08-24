@@ -18,6 +18,8 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -44,10 +46,14 @@ public class CorridaActivity extends AppCompatActivity
     private LocationManager locationManager;
     private LocationListener locationListener;
     private LatLng localMotorista;
+    private LatLng localPassageiro;
     private Usuario motorista;
+    private Usuario passageiro;
     private String idRequisicao;
     private Requisicao requisicao;
     private DatabaseReference firebaseRef;
+    private Marker marcadorMotorista;
+    private Marker marcadorPassageiro;
 
 
     @Override
@@ -58,8 +64,8 @@ public class CorridaActivity extends AppCompatActivity
         inicializarComponentes();
 
         //Recupera dados usuario
-        if(getIntent().getExtras().containsKey("idRequisicao")
-                && getIntent().getExtras().containsKey("motorista")){
+        if (getIntent().getExtras().containsKey("idRequisicao")
+                && getIntent().getExtras().containsKey("motorista")) {
             Bundle extras = getIntent().getExtras();
             motorista = (Usuario) extras.getSerializable("motorista");
             idRequisicao = extras.getString("idRequisicao");
@@ -67,7 +73,7 @@ public class CorridaActivity extends AppCompatActivity
         }
     }
 
-    private void verificaStatusRequisicao(){
+    private void verificaStatusRequisicao() {
         DatabaseReference requisicoes = firebaseRef.child("requisicoes")
                 .child(idRequisicao);
         requisicoes.addValueEventListener(new ValueEventListener() {
@@ -75,8 +81,13 @@ public class CorridaActivity extends AppCompatActivity
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 //Recuperar Requisição
                 requisicao = snapshot.getValue(Requisicao.class);
+                passageiro = requisicao.getPassageiro();
+                localPassageiro = new LatLng(
+                        Double.parseDouble(passageiro.getLatitude()),
+                        Double.parseDouble(passageiro.getLongitude())
+                );
 
-                switch (requisicao.getStatus() ){
+                switch (requisicao.getStatus()) {
                     case Requisicao.STATUS_AGUARDANDO:
                         requisicaoAguardando();
                         break;
@@ -93,15 +104,74 @@ public class CorridaActivity extends AppCompatActivity
         });
     }
 
-    private void requisicaoAguardando(){
+    private void requisicaoAguardando() {
         buttonAceitarCorrida.setText("Aceitar Corrida");
     }
 
-    private void requisicaoACaminho(){
+    private void requisicaoACaminho() {
         buttonAceitarCorrida.setText("A Caminho do passageiro");
+
+        //Exibe marcador motorista
+        adicionarMarcadorMotorista(localMotorista, motorista.getNome());
+
+        //Exibe marcador passageiro
+        adicionarMarcadorPassageiro(localPassageiro, passageiro.getNome());
+
+        //Centralizar dois marcadores
+        centralizarDoisMarcadores(marcadorMotorista, marcadorPassageiro);
+    }
+
+    private void centralizarDoisMarcadores(Marker marcador1, Marker marcador2){
+
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+
+        builder.include(marcador1.getPosition());
+        builder.include(marcador2.getPosition());
+
+        LatLngBounds bounds = builder.build();
+
+        int largura = getResources().getDisplayMetrics().widthPixels;
+        int altura = getResources().getDisplayMetrics().heightPixels;
+        int espacoInterno = (int) (largura * 0.20);
+
+        mMap.moveCamera(
+                CameraUpdateFactory.newLatLngBounds(bounds, largura, altura, espacoInterno)
+        );
 
     }
 
+    private void adicionarMarcadorMotorista(LatLng localizacao, String titulo) {
+
+        if (marcadorMotorista != null){
+            marcadorMotorista.remove();
+        }
+
+        marcadorMotorista = mMap.addMarker(
+                new MarkerOptions()
+                        .position(localizacao)
+                        .title(titulo)
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.carro))
+        );
+
+        mMap.moveCamera(
+                CameraUpdateFactory.newLatLngZoom(localizacao, 20)
+        );
+    }
+    private void adicionarMarcadorPassageiro(LatLng localizacao, String titulo) {
+
+        if (marcadorPassageiro != null){
+            marcadorPassageiro.remove();
+        }
+
+        marcadorPassageiro = mMap.addMarker(
+                new MarkerOptions()
+                        .position(localizacao)
+                        .title(titulo)
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.usuario))
+        );
+
+
+    }
 
 
     /**
@@ -166,7 +236,7 @@ public class CorridaActivity extends AppCompatActivity
 
     }
 
-    public void aceitarCorrida(View view){
+    public void aceitarCorrida(View view) {
         //Configura Requisição
 
         requisicao = new Requisicao();
@@ -177,7 +247,7 @@ public class CorridaActivity extends AppCompatActivity
         requisicao.atualizar();
     }
 
-    private void inicializarComponentes(){
+    private void inicializarComponentes() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -188,7 +258,6 @@ public class CorridaActivity extends AppCompatActivity
 
         //Configurações iniciais
         firebaseRef = ConfiguracaoFirebase.getFirebaseDatabase();
-
 
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
