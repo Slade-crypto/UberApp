@@ -194,7 +194,7 @@ public class RequisicoesActivity extends AppCompatActivity {
                     textResultado.setVisibility(View.VISIBLE);
                     recyclerRequisicoes.setVisibility(View.GONE);
                 }
-
+                listaRequisicao.clear();
                 for(DataSnapshot ds: snapshot.getChildren()){
                     Requisicao requisicao = ds.getValue(Requisicao.class);
 
