@@ -31,5 +31,19 @@
         android:text="Aceitar corrida"
         android:theme="@style/botaoPadrao" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabRota"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="66dp"
+        android:src="@drawable/rota"
+        app:backgroundTint="@android:color/holo_orange_dark"
+        app:fabSize="normal"
+        android:visibility="gone"
+        tools:visibility="visible"/>
+
+
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
