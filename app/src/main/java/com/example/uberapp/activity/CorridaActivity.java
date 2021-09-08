@@ -13,6 +13,7 @@ import android.os.Build;
 import android.os.Bundle;
 
 import com.example.uberapp.config.ConfiguracaoFirebase;
+import com.example.uberapp.helper.Local;
 import com.example.uberapp.helper.UsuarioFirebase;
 import com.example.uberapp.model.Destino;
 import com.example.uberapp.model.Requisicao;
@@ -49,6 +50,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+
+import java.text.DecimalFormat;
 
 public class CorridaActivity extends AppCompatActivity
         implements OnMapReadyCallback {
@@ -150,6 +153,7 @@ public class CorridaActivity extends AppCompatActivity
 
     private void requisicaoFinalizada() {
         fabRota.setVisibility(View.GONE);
+        requisicaoAtiva = false;
 
         if (marcadorMotorista != null) {
             marcadorMotorista.remove();
@@ -168,8 +172,12 @@ public class CorridaActivity extends AppCompatActivity
         centralizarMarcador(localDestino);
 
         //Calcular distancia
+        float distancia = Local.caclcularDistancia(localPassageiro, localDestino);
+        float valor = distancia * 4;
+        DecimalFormat decimal = new DecimalFormat("0.00");
+        String resultado = decimal.format(valor);
 
-        buttonAceitarCorrida.setText("Corrida finalizada - R$20");
+        buttonAceitarCorrida.setText("Corrida finalizada - R$ " + resultado);
 
     }
 
@@ -400,11 +408,11 @@ public class CorridaActivity extends AppCompatActivity
             @Override
             public void onLocationChanged(@NonNull Location location) {
 
-                double latitude = -21.541585;
-                double longitude = -45.747554;
+//                double latitude = -21.541585;
+//                double longitude = -45.747554;
 //                //Recuperar latitude longitude
-//                double latitude = location.getLatitude();
-//                double longitude = location.getLongitude();
+                double latitude = location.getLatitude();
+                double longitude = location.getLongitude();
                 localMotorista = new LatLng(latitude, longitude);
 
                 //Atualizar Geofire

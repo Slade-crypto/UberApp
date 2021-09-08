@@ -10,8 +10,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.uberapp.R;
+import com.example.uberapp.helper.Local;
 import com.example.uberapp.model.Requisicao;
 import com.example.uberapp.model.Usuario;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.List;
 
@@ -27,11 +29,11 @@ public class RequisicoesAdapter extends RecyclerView.Adapter<RequisicoesAdapter.
         this.motorista = motorista;
     }
 
- 
+
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View item = LayoutInflater.from(parent.getContext()).inflate(R.layout.adater_requisicoes, parent, false);
-        return new MyViewHolder(item) ;
+        return new MyViewHolder(item);
     }
 
     @Override
@@ -41,9 +43,26 @@ public class RequisicoesAdapter extends RecyclerView.Adapter<RequisicoesAdapter.
         Usuario passageiro = requisicao.getPassageiro();
 
 
-
         holder.nome.setText(passageiro.getNome());
-        holder.distancia.setText("1 km- aproximadamente");
+
+        if ((motorista.getLatitude() != null) && (motorista.getLongitude() != null)) {
+
+            LatLng localPassageiro = new LatLng(
+                    Double.parseDouble(passageiro.getLatitude()),
+                    Double.parseDouble(passageiro.getLongitude())
+            );
+            
+            LatLng localMotorista = new LatLng(
+                    Double.parseDouble(motorista.getLatitude()),
+                    Double.parseDouble(motorista.getLongitude())
+            );
+
+            float distancia = Local.caclcularDistancia(localPassageiro, localMotorista);
+            String distanciaFormatada = Local.formatarDistancia(distancia);
+            holder.distancia.setText(distanciaFormatada + " - aproximadamente");
+
+        }
+
 
     }
 
@@ -52,11 +71,11 @@ public class RequisicoesAdapter extends RecyclerView.Adapter<RequisicoesAdapter.
         return requisicoes.size();
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder{
+    public class MyViewHolder extends RecyclerView.ViewHolder {
 
         TextView nome, distancia;
 
-        public MyViewHolder(View itemView){
+        public MyViewHolder(View itemView) {
             super(itemView);
 
             nome = itemView.findViewById(R.id.textRequisicaoNome);
