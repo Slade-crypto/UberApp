@@ -51,7 +51,7 @@ public class RequisicoesAdapter extends RecyclerView.Adapter<RequisicoesAdapter.
                     Double.parseDouble(passageiro.getLatitude()),
                     Double.parseDouble(passageiro.getLongitude())
             );
-            
+
             LatLng localMotorista = new LatLng(
                     Double.parseDouble(motorista.getLatitude()),
                     Double.parseDouble(motorista.getLongitude())
